@@ -12,3 +12,8 @@ from . import main
 @main.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
+
+@main.route('/test', methods=['GET', 'POST'])
+def test_index():
+    return render_template('test_index_01.html')
