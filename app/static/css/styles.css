@@ -1,0 +1,11 @@
+.navbar {
+    margin-bottom: 0px
+}
+.footer {
+    height: 50px;
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+    margin-bottom: 0px;
+    padding: 0px;
+}
