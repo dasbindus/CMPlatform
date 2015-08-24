@@ -3,6 +3,10 @@
 
 __author__ = 'Jack Bai'
 
+"""
+A module to send asynchronous email by using flask-email.
+"""
+
 from flask import current_app, render_template
 from flask.ext.mail import Message
 from . import mail
