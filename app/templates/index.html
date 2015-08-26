@@ -1,9 +1,7 @@
 {% extends "__base__.html" %}
 
-{% block page_content %}
-{% if current_user.is_authenticated() %}
-<h1>Hello, {{ current_user.username }}!</h1>
-{% else %}
+{% block carousel %}
+{% if not current_user.is_authenticated() %}
 <!-- Carousel
     ================================================== -->
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -54,6 +52,14 @@
         <span class="sr-only">Next</span>
       </a>
     </div><!-- /.carousel -->
+{% endif %}
+{% endblock %}
+
+
+{% block page_content %}
+{% if current_user.is_authenticated() %}
+<h1>Hello, {{ current_user.username }}!</h1>
+{% else %}
 <h1>Hello, Stranger!</h1>
 {% endif %}
 {% endblock %}
