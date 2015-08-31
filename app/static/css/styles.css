@@ -3,8 +3,9 @@
 }
 .footer {
     height: 50px;
-    position: fixed;
+    position: relative;
     bottom: 0px;
+    left: 0px;
     text-align: center;
     margin-bottom: 0px;
     padding: 0px;
