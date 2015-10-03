@@ -71,16 +71,19 @@
 
           <ul class="nav navbar-nav navbar-right">
               <li><a href="">APP Download</a></li>
+              <li><a >|</a></li>
               {% if current_user.is_authenticated() %}
               <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="">Account <b class="caret"></b></a>
                 <ul class="dropdown-menu">
+                  <li class="dropdown-header">Signed in as <strong>{{ current_user.username }}</strong></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Profile</a></li>
                   <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
                   <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
-                  <li><a href="#">More</a></li>
+                  <li><a href="#">Help</a></li>
                   <li role="separator" class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">Settings</a></li>
                   <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
                 </ul>
               </li>
