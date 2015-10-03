@@ -1,0 +1,29 @@
+{% extends "__base__.html" %}
+
+{% block title %}CMP - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ user.username }}</h1>
+    {% if user.name or user.location %}
+    <p>
+        {% if user.name %}<strong>Real Name: </strong>{{ user.name }}<br>{% endif %}
+        {% if user.location %}
+            <strong>From: </strong><a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+        {% endif %}
+    </p>
+    {% endif %}
+
+    <strong>Sex: </strong>{% if user.sex %}Male{% else %}Female{% endif %}<br>
+
+    {% if user.age %}<strong>Age: </strong>{{ user.age }}<br>{% endif %}
+
+    {% if user.profession %}<strong>Profession: </strong>{{ user.profession }}<br>{% endif %}
+
+    {% if current_user.is_administrator() %}
+    <p><strong>Mail To: </strong><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+    {% endif %}
+    {% if user.about_me %}<p><strong>About Me: </strong>{{ user.about_me }}</p>{% endif %}
+    <p>Member since {{ moment(user.member_since).format('L') }}. Last seen {{ moment(user.last_seen).fromNow() }}.</p>
+</div>
+{% endblock %}

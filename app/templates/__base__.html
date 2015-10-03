@@ -74,11 +74,11 @@
               <li><a >|</a></li>
               {% if current_user.is_authenticated() %}
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="">Account <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="#">Account <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li class="dropdown-header">Signed in as <strong>{{ current_user.username }}</strong></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="#">Profile</a></li>
+                  <li><a href="{{ url_for('main.user_profile', username=current_user.username) }}">Profile</a></li>
                   <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
                   <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
                   <li><a href="#">Help</a></li>
@@ -127,6 +127,8 @@
     <script src="//cdn.bootcss.com/holder/2.8.1/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+
+    {{ moment.include_moment() }}
     {% endblock %}
 
   </body>
