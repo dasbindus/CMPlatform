@@ -28,3 +28,13 @@ def user_profile(username):
 @main.route('/test', methods=['GET', 'POST'])
 def test_index():
     return render_template('test_index_01.html')
+
+
+
+
+# [-----------------------------------------------]
+# [             JQuery Mobile Tests               ]
+# [-----------------------------------------------]
+@main.route('/mobile/1', methods=['GET', 'POST'])
+def jquery_mobile_test1():
+    return render_template('mobile/test.html')
