@@ -37,4 +37,9 @@ def test_index():
 # [-----------------------------------------------]
 @main.route('/mobile/1', methods=['GET', 'POST'])
 def jquery_mobile_test1():
-    return render_template('mobile/test.html')
+    return render_template('mobile/test1.html')
+
+
+@main.route('/mobile/2', methods=['GET', 'POST'])
+def jquery_mobile_test2():
+    return render_template('mobile/test2.html')
