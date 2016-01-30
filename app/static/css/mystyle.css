@@ -1,0 +1,428 @@
+/*=============================================================
+    Authour URI: www.binarytheme.com
+    License: Commons Attribution 3.0
+
+    http://creativecommons.org/licenses/by/3.0/
+
+    100% To use For Personal And Commercial Use.
+    IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
+   
+    ========================================================  */
+/* ===========================================================
+   GENERAL STYLES   
+   ============================================================*/
+body {
+   font-family:'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000;   
+    margin-top: 40px;
+    line-height:16px;
+     background-color: #EBEBEB;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family:'Open Sans', sans-serif;
+  font-weight: 500;
+  line-height:40px;
+   
+}
+
+h1 {
+    color:#11B674;
+    font-weight: 900;
+    
+}
+.text-center {
+    text-align: center; 
+}
+
+.main-top-margin {
+     margin-top: 75px;
+     background-color: rgba(73, 151, 250, 0.11);
+}
+.main-low-margin {
+     margin-top: 65px;
+}
+
+a,a:hover {
+    text-decoration:none;
+}
+
+p {
+    line-height: 30px;
+    margin-bottom: 23px;
+}
+
+.img-margin-product {
+    margin-top:30px;
+}
+.bottam-pad {
+     padding-bottom:40px;
+}
+.text-justify {
+    text-align:justify;
+}
+
+
+/* ==========================================================================
+   COLOR CODES
+   ========================================================================== */
+
+.color-red {
+    color:#ff0000;
+}
+
+.color-green {
+    color:#07BB00;
+}
+
+.color-light-blue {
+    color:#BB00BB;
+}
+
+.color-blue {
+    color:#0052FF;
+}
+.color-brown {
+    color:#EB8F2D;
+}
+.color-black {
+    color:#000000;
+}
+
+
+/* ==========================================================================
+   HEADER SECTION
+   ========================================================================== */
+
+#header-section {
+	background: url(../img/1.jpg) no-repeat center top;
+	margin-top: -20px;
+	padding-top:20px;
+	text-align:center;
+	background-position: center center;
+	min-height: 300px;
+	width: 100%;	
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    background-size: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#header-section h1 {
+	margin-top: 90px;
+	color: white;
+	font-size: 75px;
+	font-weight: 900;
+	letter-spacing: 4px;
+    line-height:70px;
+}
+
+#header-section h2 {
+	color: white;
+	font-size: 40px;
+	font-weight: 900;
+	letter-spacing: 4px;
+}
+#header-section h3 {
+	color: white;
+	font-size: 30px;
+	font-weight: 900;
+	letter-spacing: 4px;
+    padding-bottom:80px;
+}
+.down-icon {
+     color:white;
+    font-weight:900;
+}
+
+
+/*==========================================
+   SOCIAL ICON STYLES
+    =====================================================*/
+
+.color-facebook {
+    color:#3B5998;
+}
+.color-twitter {
+     color:#00aced;
+}
+.color-google-plus {
+     color:#dd4b39;
+}
+.color-linkedin {
+     color:#007bb6;
+}
+.color-pinterest {
+     color:#cb2027;
+}
+/* ===========================================================
+   BOOTSTRAP ELEMENTS CHANGES   
+   ============================================================*/
+.navbar {
+	font-size: 14px;
+}
+
+.navbar-inverse {
+	background: #000000;
+
+}
+
+.navbar-inverse .navbar-nav > .active > a {
+	background: #ffffff;
+}
+
+.navbar-inverse .navbar-brand {
+	color: #ffffff;
+	font-weight: bolder;
+	font-size: 25px;
+  font-weight:900;
+	letter-spacing: 2px;
+}
+.navbar-inverse :hover .navbar-brand:hover {
+	color: #ffffff;	
+}
+.navbar-inverse .navbar-nav > li > a {
+color: #FFFFFF;
+}
+
+/*=======================================
+    PRICING STYLES
+==================================================*/
+
+.pricing-table-main {
+  padding: 0;
+  margin: 30px 0;
+  line-height: 150%;
+  text-align: center;
+}
+
+.pricing-table-main li {
+  list-style: none;
+}
+
+.pricing-table-main > li {
+  color: #fff;
+ background-color: #AA3BD5;
+ 
+}
+
+.pricing-table-main > li.active {
+  z-index: 1;
+  color: #000;
+  -webkit-box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.5);
+          background-color: #A5C4EB;
+}
+
+.pricing-table-main .round-body {
+  display: table;
+  width: 135px;
+  height: 135px;
+  margin: 0 auto 14px auto;
+  border: 3px solid #fff;
+  border-radius: 100%;
+
+}
+.pricing-table-main .price {
+  display: table-cell;
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.pricing-table-main .price .price-Unit {
+  display: block;
+}
+
+.pricing-table-main .price .unit-info {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.pricing-table-main h2 {
+  padding: 15px 0;
+  text-transform: uppercase;
+  font-weight:900;
+  border-bottom:1px dotted #fff;
+  margin-bottom:25px;
+}
+.pricing-table-main .main-features ul {
+  padding: 0;
+  margin: 0;
+}
+.pricing-table-main .main-features ul li {
+  padding: 7px 0;
+   border-bottom:1px dotted #fff;
+}
+.pricing-table-main .footer {
+  padding: 25px;
+  margin: 20px -16px 0;
+  background: #E7E6E6;
+}
+/*==========================================
+    PORTFOLIO STYLES
+    =====================================================*/
+
+
+.portfolio-items,
+.portfolio-filter {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.portfolio-items {
+  margin-right: -20px;
+}
+.portfolio-filter {
+  margin-bottom: 50px;
+  text-align: center;
+}
+.portfolio-filter > li {
+  display: inline-block;
+}
+.portfolio-items > li {
+  float: left;
+  padding: 0;
+  margin: 0;
+}
+
+.portfolio-items.col-3 > li {
+  width: 33%;
+}
+
+.portfolio-item .item-main {
+  margin: 0 10px 10px 0;
+  text-align: center;
+  background: #fff;
+  padding: 10px;
+  border:1px solid #E8EAEE;
+  
+}
+.portfolio-item img {
+  width: 100%;
+}
+.portfolio-item .portfolio-image {
+  position: relative;
+}
+.portfolio-item h5 {
+  margin: 0;
+  padding: 10px 0 10px 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background-color: rgb(128, 188, 253);
+color: #fff;
+}
+.portfolio-item .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  vertical-align: middle;
+  -webkit-transition: opacity 300ms;
+  -moz-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+.portfolio-item .overlay .preview {
+  position: relative;
+  top: 50%;
+  display: inline-block;
+  margin-top: -20px;
+}
+.portfolio-item:hover .overlay {
+  opacity: 1;
+}
+
+/*==========================================
+   ISOTOPE FILTERING STYLES
+    =====================================================*/
+
+.isotope-item {
+  z-index: 2;
+}
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+/* ISOTOPE CSS3 TRANSACTIONS */
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -ms-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+.isotope {
+  -webkit-transition-property: height, width;
+  -moz-transition-property: height, width;
+  -ms-transition-property: height, width;
+  -o-transition-property: height, width;
+  transition-property: height, width;
+}
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -ms-transition-property: -ms-transform, opacity;
+  -o-transition-property: -o-transform, opacity;
+  transition-property: transform, opacity;
+}
+/* DISABLE ISOTOPE CSS3 TRANSACTIONS */
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -ms-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
+}
+/* DISABLE ISOTOPE CSS3 TRANSACTIONS FOR CONTAINERS WITH INFINITE SCROLLING */
+.isotope.infinite-scrolling {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+/* ==========================================================================
+   FOOTER SECTION
+   ========================================================================== */
+   
+
+#footer {
+    margin-top:100px;
+    background-color: #000; 
+    color: #fff; 
+    text-align: right; 
+    padding: 10px 30px 10px 30px;
+}
+
+
+/*==========================================
+    MEDIA QURIES
+    =====================================================*/
+@media (max-width: 847px) {
+    .flot-nav {
+    float:left;
+}
+     
+}
+
+@media (max-width: 1090px) {
+    .img-thumbnail {
+max-width: 50%;
+}
+}
