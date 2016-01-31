@@ -46,6 +46,7 @@ def jquery_mobile_test2():
     return render_template('mobile/test2.html')
 
 
+
 # [-----------------------------------------------]
 # [             Sample template test              ]
 # [-----------------------------------------------]
@@ -53,9 +54,11 @@ def jquery_mobile_test2():
 def sample_index():
     return render_template('sample/index.html')
 
+
 @main.route('/sample/about', methods=['GET', 'POST'])
 def sample_about():
     return render_template('sample/about.html')
+
 
 @main.route('/sample/portfolio', methods=['GET', 'POST'])
 def sample_portfolio():
@@ -66,13 +69,16 @@ def sample_portfolio():
 def sample_services():
     return render_template('sample/services.html')
 
+
 @main.route('/sample/pricing', methods=['GET', 'POST'])
 def sample_pricing():
     return render_template('sample/pricing.html')
 
+
 @main.route('/sample/founders', methods=['GET', 'POST'])
 def sample_founders():
     return render_template('sample/founders.html')
+
 
 @main.route('/sample/contact', methods=['GET', 'POST'])
 def sample_contact():

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- HEAD SECTION -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+
+    {% block meta %}
+    <!-- block meta  -->
+    {% endblock %}
+
+    <title>
+      {% block title %}Welcome to Lab409!{% endblock %}
+    </title>
+
+    {% block styles %}
+    <!--GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <!--BOOTSTRAP MAIN STYLES -->
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet" />
+    <!--FONTAWESOME MAIN STYLE -->
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet" />
+    
+    <!--CUSTOM STYLE -->
+    <link href="{{ url_for('static', filename='css/mystyle.css') }}" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+
+
+</head>
+    <!--END HEAD SECTION -->
+
+<body>  
+    <!-- NAV SECTION -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">YOUR LOGO</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url_for('main.sample_index') }}">HOME</a></li>
+                    <li><a href="{{ url_for('main.sample_about') }}">ABOUT</a></li>
+                    <li><a href="{{ url_for('main.sample_portfolio') }}">PORTFOLIO</a></li>
+                    <li><a href="{{ url_for('main.sample_services') }}">SERVICES</a></li>
+                    <li><a href="{{ url_for('main.sample_pricing') }}">PRICING</a></li>
+                    <li><a href="{{ url_for('main.sample_founders') }}">FOUNDERS</a></li>
+                    <li><a href="{{ url_for('main.sample_contact') }}">CONTACT</a></li>
+                </ul>
+            </div>
+           
+        </div>
+    </div>
+    <!--END NAV SECTION -->
+
+
+    {% block content %}
+    <!-- put your content here -->
+    {% endblock %}
+
+    <!--FOOTER SECTION -->
+    <div id="footer">
+        <div class="container">
+            <div class="row ">
+                &copy; 2014 www.yourdomain.com | All Right Reserved                 
+        
+            </div>
+            
+        </div>
+       
+    </div>  
+    <!--END FOOTER SECTION -->
+
+    {% block scripts %}
+    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+    <!-- CORE JQUERY LIBRARY -->
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <!-- CORE BOOTSTRAP LIBRARY -->
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+           <!-- CUSTOM SCRIPT-->
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    {% endblock %}
+
+</body>
+</html>
