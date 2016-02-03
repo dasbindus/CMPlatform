@@ -1,9 +1,18 @@
-{% extends "__base__.html" %}
+{% extends "base.html" %}
 
 {% block title %}Lab409 - Forbidden{% endblock %}
 
-{% block page_content %}
-<div class="page-header">
-    <h1>Forbidden</h1>
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <br> <br> <br> <br>
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div class="page-header">
+        <h1>Forbidden</h1>
+    </div>
 </div>
 {% endblock %}

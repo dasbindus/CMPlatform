@@ -1,16 +1,25 @@
-{% extends "__base__.html" %}
+{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}LAB409 - Login{% endblock %}
 
-{% block page_content %}
-<div class="page-header">
-    <h1>Login</h1>
-</div>
-<div class="col-md-4">
-    {{wtf.quick_form(form)}}
-    <br>
-    <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>
-    <p>New User? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <br> <br> <br> <br>
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div class="page-header">
+        <h1>Login</h1>
+    </div>
+    <div class="col-md-4">
+        {{wtf.quick_form(form)}}
+        <br>
+        <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>
+        <p>New User? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+    </div>
 </div>
 {% endblock %}

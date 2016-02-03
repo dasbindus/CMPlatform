@@ -406,7 +406,8 @@ color: #fff;
     margin-top:100px;
     background-color: #000; 
     color: #fff; 
-    text-align: right; 
+    text-align: center;
+    margin-bottom: 0px;
     padding: 10px 30px 10px 30px;
 }
 

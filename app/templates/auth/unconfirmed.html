@@ -1,20 +1,29 @@
-{% extends "__base__.html" %}
+{% extends "base.html" %}
 
 {% block title %}LAB409 - Confirm your accont{% endblock %}
 
-{% block page_content %}
-<div class="page-header">
-    <h1>
-        Hello, {{ current_user.username }}!
-    </h1>
-    <h3>You have not confirmed your account yet.</h3>
-    <p>
-        Before you can access this site you need to confirm your account.
-        Check your inbox, you should have received an email with a confirmation link.
-    </p>
-    <p>
-        Need another confirmation email?
-        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
-    </p>
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <br> <br> <br> <br>
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div class="page-header">
+        <h1>
+            Hello, {{ current_user.username }}!
+        </h1>
+        <h3>You have not confirmed your account yet.</h3>
+        <p>
+            Before you can access this site you need to confirm your account.
+            Check your inbox, you should have received an email with a confirmation link.
+        </p>
+        <p>
+            Need another confirmation email?
+            <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

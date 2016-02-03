@@ -58,13 +58,34 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ url_for('main.sample_index') }}">HOME</a></li>
-                    <li><a href="{{ url_for('main.sample_about') }}">ABOUT</a></li>
-                    <li><a href="{{ url_for('main.sample_portfolio') }}">PORTFOLIO</a></li>
-                    <li><a href="{{ url_for('main.sample_services') }}">SERVICES</a></li>
-                    <li><a href="{{ url_for('main.sample_pricing') }}">PRICING</a></li>
-                    <li><a href="{{ url_for('main.sample_founders') }}">FOUNDERS</a></li>
-                    <li><a href="{{ url_for('main.sample_contact') }}">CONTACT</a></li>
+                    <li><a href="{{ url_for('main.index') }}">HOME</a></li>
+                    <li><a href="{{ url_for('main.about') }}">ABOUT</a></li>
+                    <li><a href="{{ url_for('main.portfolio') }}">PORTFOLIO</a></li>
+                    <li><a href="{{ url_for('main.services') }}">SERVICES</a></li>
+                    <li><a href="{{ url_for('main.pricing') }}">PRICING</a></li>
+                    <li><a href="{{ url_for('main.founders') }}">FOUNDERS</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">CONTACT</a></li>
+
+                    {% if current_user.is_authenticated() %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="#">Account <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Signed in as <strong>{{ current_user.username }}</strong></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ url_for('main.user_profile', username=current_user.username) }}">Profile</a></li>
+                            <li><a href="{{ url_for('auth.change_password') }}">Change Password</a></li>
+                            <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                        <li><a >|</a></li>
+                        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                    {% endif %}
                 </ul>
             </div>
            
@@ -98,6 +119,8 @@
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
            <!-- CUSTOM SCRIPT-->
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+
     {% endblock %}
 
 </body>
