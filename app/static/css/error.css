@@ -1,0 +1,9 @@
+.errormsg {
+    margin-top: 80px;
+    padding-bottom: 50px;
+}
+
+.errormsg h1 {
+  color: #000000;
+  font-size: 100px;
+}

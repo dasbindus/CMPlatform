@@ -2,17 +2,18 @@
 
 {% block title %}Lab409 - Forbidden{% endblock %}
 
+{% block styles %}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/error.css') }}" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    {% for message in get_flashed_messages() %}
-    <br> <br> <br> <br>
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
+<div class="container text-center">
+    <div class="errormsg">
+        <h1>Error 403!</h1>
     </div>
-    {% endfor %}
-    <div class="page-header">
-        <h1>Forbidden</h1>
-    </div>
+    <p class="lead text-muted">Oops, an error has occurred. Forbidden!</p>
 </div>
 {% endblock %}
+
+{% block footer %}<!-- nothing -->{% endblock %}
