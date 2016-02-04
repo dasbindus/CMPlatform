@@ -3,14 +3,27 @@
 
 __author__ = 'Jack Bai'
 
+import os
 from datetime import datetime
 from flask import render_template, abort, session, redirect, url_for, \
     current_app, flash, request, make_response
 from flask.ext.login import login_required
+from werkzeug import secure_filename
 from .. import db
 from . import main
 from ..models import User, Role
 from ..decorators import admin_required
+
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file(filename):
+    """
+    Allowed upload file type.
+    """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -47,9 +60,19 @@ def contact():
     return render_template('contact.html')
 
 
-@main.route('/user/<username>', methods=['GET'])
+@main.route('/user/<username>', methods=['GET', 'POST'])
+@login_required
 def user_profile(username):
+    app = current_app._get_current_object()
     user = User.query.filter_by(username=username).first_or_404()
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return 'success'
+        else:
+            return 'upload file type is not supported.'
     return render_template('profile.html', user=user)
 
 

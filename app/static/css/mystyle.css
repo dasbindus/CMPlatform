@@ -427,3 +427,16 @@ color: #fff;
 max-width: 50%;
 }
 }
+
+
+/*==========================================
+    USER PROFILE
+    =====================================================*/
+.profile-thumbnail {
+    position: absolute;
+    margin-top: 10px;
+}
+.profile-header {
+    min-height: 260px;
+    margin-left: 300px;
+}

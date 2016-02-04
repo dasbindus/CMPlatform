@@ -2,18 +2,105 @@
 
 {% block title %}CMP - {{ user.username }}{% endblock %}
 
+{% block styles %}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/bootstrap-fileupload.min.css') }}" rel="stylesheet" />
+
+<script type="text/javascript">
+    function showimg(){
+    $("#avatar").each(function(index, element){
+    var scale = 6/10;
+    var width = $(element).width();
+    $(element).css("height", width*scale);
+});
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     {% for message in get_flashed_messages() %}
-    <br> <br> <br> <br>
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         {{ message }}
     </div>
     {% endfor %}
 
+
+    <div class="page-header">
+
+        <img class="img-rounded profile-thumbnail" src="{{ url_for('static', filename='img/avatar/1.jpg') }}" height="256px" width="256px">
+
+        <div class="profile-header">
+            <h1>{{ user.username }}</h1>
+            {% if user.name or user.location %}
+            <p>
+                {% if user.name %}{{ user.name }}<br>{% endif %}
+                {% if user.location %}
+                    From <a href="http://maps.baidu.com/?q={{ user.location }}">{{ user.location }}</a><br>
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if current_user.is_administrator() %}
+            <p><a href="mailto:{{ user.eamil }}">{{ user.email }}</a></p>
+            {% endif %}
+            {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+            <p>Member since {{ moment(user.member_since).format('L') }}. Last Seen {{ moment(user.last_seen).fromNow() }}.</p>
+            <p>
+                {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                    {% if not current_user.is_following(user) %}
+                    <a href="#" class="btn btn-primary">Follow</a>
+                    {% else %}
+                    <a href="#" class="btn btn-default">Unfollow</a>
+                    {% endif %}
+                {% endif %}
+                <a href="#">Followers:<span class="badge">11</span></a>
+                <a href="#">Following:<span class="badge">23</span></a>
+                <!-- {% if current_user.is_authenticated() and user != current_user and user.is_following(current_user) %} -->
+                | <span class="label label-default">Follows you</span>
+                <!-- {% endif %} -->
+            </p>
+            <p>
+                {% if user == current_user %}
+                <a href="#" class="btn btn-default">Edit Profile</a>
+                {% endif %}
+                {% if current_user.is_administrator() %}
+                <a href="#" class="btn btn-danger">Edit Profile [Admin]</a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+
+
     <div class="page-header">
         <h1>{{ user.username }}</h1>
+
+        <form action="" method=post enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+
+        <div class="form">
+            <label class="control-label col-lg-4">Avatar</label>
+            <div class="col-lg-8">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img src="{{ url_for('static', filename='img/demoUpload.jpg') }}" alt="" />
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                    <div>
+                        <span class="btn btn-file btn-primary">
+                            <span class="fileupload-new">Select image</span>
+                            <span class="fileupload-exists">Change</span>
+                            <input type="file" />
+                        </span>
+                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remove</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% if user.name or user.location %}
         <p>
             {% if user.name %}<strong>Real Name: </strong>{{ user.name }}<br>{% endif %}
@@ -36,4 +123,9 @@
         <p>Member since {{ moment(user.member_since).format('L') }}. Last seen {{ moment(user.last_seen).fromNow() }}.</p>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/bootstrap-fileupload.js') }}"></script>
 {% endblock %}
