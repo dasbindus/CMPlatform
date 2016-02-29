@@ -38,7 +38,7 @@ class DevelopmentConfig(Config):
     configiration when developing.
     '''
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost:3306/car_server'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost:3306/app_lab409'
 
 
 class TestingConfig(Config):
