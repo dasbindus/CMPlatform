@@ -38,6 +38,7 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/scroll_bar.css') }}">
     {% endblock %}
 
 
@@ -93,10 +94,24 @@
     </div>
     <!--END NAV SECTION -->
 
-
+    {% block parent_content %}
+    <br>
+    <div class="go-top dn" id="go-top">
+    <a href="javascript:;" class="uc-2vm"></a>
+    <div class="uc-2vm-pop dn">
+        <h2 class="title-2wm">用微信扫一扫</h2>
+        <div class="logo-2wm-box">
+            <img src="{{ url_for('static', filename='img/weixin.jpg') }}" alt="zxing" width="200" height="200">
+        </div>
+    </div>
+    <a href="http://www.fudan.edu.cn" target="_blank" class="feedback"></a>
+    <a href="javascript:;" class="go"></a>
+    </div>
     {% block content %}
     <!-- put your content here -->
     {% endblock %}
+    {% endblock %}
+
 
     {% block footer %}
     <!--FOOTER SECTION -->
@@ -119,9 +134,10 @@
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     <!-- CORE BOOTSTRAP LIBRARY -->
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-           <!-- CUSTOM SCRIPT-->
+    <!-- CUSTOM SCRIPT-->
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-
+    <!-- SCROLL BAR -->
+    <script src="{{ url_for('static', filename='js/scroll_bar.js') }}"></script>
 
     {% endblock %}
 
