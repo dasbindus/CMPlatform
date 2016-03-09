@@ -12,7 +12,7 @@ from werkzeug import secure_filename
 from .. import db
 from . import main
 from ..models import User, Role
-from ..decorators import admin_required
+from ..decorators import admin_required, permission_required
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -59,9 +59,13 @@ def founders():
 def contact():
     return render_template('contact.html')
 
+#[-------------------------------------------------]
+#[                    profile                      ]
+#[-------------------------------------------------]
 
 @main.route('/user/<username>', methods=['GET', 'POST'])
 @login_required
+@permission_required(Permission.FOLLOW)
 def user_profile(username):
     app = current_app._get_current_object()
     user = User.query.filter_by(username=username).first_or_404()
@@ -74,6 +78,19 @@ def user_profile(username):
         else:
             return 'upload file type is not supported.'
     return render_template('profile.html', user=user)
+
+
+@main.route('/user/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    pass
+
+
+@main.route('/user/edit-profile/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_profile_admin(id):
+    pass
 
 
 
