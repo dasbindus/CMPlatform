@@ -11,7 +11,7 @@ from flask.ext.login import login_required
 from werkzeug import secure_filename
 from .. import db
 from . import main
-from ..models import User, Role
+from ..models import Permission, User, Role
 from ..decorators import admin_required, permission_required
 
 
