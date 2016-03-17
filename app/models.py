@@ -153,6 +153,14 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
+    def to_json(self):
+        json_user = {
+            'username': self.username,
+            'member_since': self.member_since,
+            'last_seen': self.last_seen
+        }
+        return json_user
+
     def can(self, permissions):
         return self.role is not None and \
             (self.role.permissions & permissions) == permissions
