@@ -24,6 +24,7 @@ class Config:
     POSTS_PER_PAGE = 20
     FOLLOWERS_PER_PAGE = 50
     COMMENTS_PER_PAGE = 15
+    CARS_PER_PAGE = 5
 
     UPLOAD_FOLDER = '/home/baidong/Uploads_test'
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024

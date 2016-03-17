@@ -79,6 +79,7 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     # avatar_hash
+    # posts = db.relationship('Post', backref='author', lazy='dynamic')
 
 
     def __init__(self, **kw):
@@ -155,7 +156,12 @@ class User(UserMixin, db.Model):
 
     def to_json(self):
         json_user = {
+            'id': self.id,
             'username': self.username,
+            'name': self.name,
+            'email': self.email,
+            'sex': self.sex,
+            'age': self.age,
             'member_since': self.member_since,
             'last_seen': self.last_seen
         }
