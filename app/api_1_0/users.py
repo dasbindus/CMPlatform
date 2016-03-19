@@ -16,6 +16,7 @@ import datetime
 
 
 
+
 @api.route('/users/', methods=['GET'])
 def get_all_users():
     users = User.query.all()
@@ -26,10 +27,25 @@ def get_all_users():
     })
 
 
+@api.route('/users/', methods=['POST'])
+# @permission_required(Permission.) # TODO Permission Design
+def new_user():
+    user = User.from_json(request.json)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({user.to_json()}), 201
+
+
 @api.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify(user.to_json())
+
+
+@api.route('/users/<int:id>', methods=['DELETE'])
+# @permission_required
+def delete_user(id):
+    pass
 
 
 @api.route('/users/<int:id>/posts/', methods=['GET'])
@@ -78,4 +94,3 @@ def get_user_cars(id):
     #     'time': datetime.datetime.utcnow()
     # })
     pass
-
