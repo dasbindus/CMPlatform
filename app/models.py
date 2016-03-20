@@ -61,6 +61,48 @@ class Role(db.Model):
         return '<Role %r>' % self.name
 
 
+class Brand(db.Model):
+    """
+    """
+    __tablename__ = 'brands'
+    pass
+
+
+
+class PostType(db.Model):
+    """
+    """
+    __tablename__ = 'post_type'
+    pass
+
+
+
+
+class Follow(db.Model):
+    """
+    """
+    __tablename__ = 'follows'
+    pass
+
+
+
+
+class Car(db.Model):
+    """
+    """
+    __tablename__ = "cars"
+    pass
+
+
+
+class CarData(db.Model):
+    """
+    """
+    __tablename__ = 'car_data'
+    pass
+
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -78,8 +120,10 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.TEXT())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-    # avatar_hash
-    # posts = db.relationship('Post', backref='author', lazy='dynamic')
+    avatar_hash = db.Column(db.String(32))
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    # TODO Add follow relationship
 
 
     def __init__(self, **kw):
@@ -195,3 +239,87 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Post(db.Model):
+    """
+    """
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    summary = db.Column(db.Text)
+    summary_html = db.Column(db.Text)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    type_id = db.Column(db.Integer, db.ForeignKey('post_type.id'))
+    # TODO add relationship
+    # comments=2abcfimos
+
+    def __init__(self, **kwargs):
+        super(Post, self).__init__(**kwargs)
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                        'h1', 'h2', 'h3', 'p', 'img']
+        attrs = {
+            'img': ['src', 'alt'],
+            'a': ['href']
+        }
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, attributes=attrs, strip=True))
+
+    @staticmethod
+    def on_changed_summary(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                        'h1', 'h2', 'h3', 'p', 'img']
+        attrs = {
+            'img': ['src', 'alt'],
+            'a': ['href']
+        }
+        target.summary_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, attributes=attrs, strip=True))
+
+    def to_json(self):
+        json_post = {
+            'id': self.id,
+            'author': self.author,
+            'body': self.body,
+            'body_html': self.body_html
+        }
+        return json_post
+
+db.event.listen(Post.summary, 'set', Post.on_changed_summary)
+db.event.listen(Post.body, 'set', Post.on_changed_body)
+
+
+class Comment(db.Model):
+    """
+    """
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    disabled = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    # TODO add reply function
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i',
+                        'strong']
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True))
+
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+
+
