@@ -166,7 +166,7 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.TEXT())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-    avatar_hash = db.Column(db.String(32))
+    # avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     cars = db.relationship('Car', backref='owner', lazy='dynamic')
