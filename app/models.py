@@ -65,7 +65,12 @@ class Brand(db.Model):
     """
     """
     __tablename__ = 'brands'
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    cars = db.relationship('Car', backref='brand', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Brand %r>' % self.name
 
 
 
@@ -73,7 +78,13 @@ class PostType(db.Model):
     """
     """
     __tablename__ = 'post_type'
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    default = db.Column(db.Boolean, default=False, index=True)
+    posts = db.relationship('Post', backref='posttype', lazy='dynamic')
+
+    def __repr__(self):
+        return '<PostType %r>' % self.name
 
 
 
@@ -82,7 +93,9 @@ class Follow(db.Model):
     """
     """
     __tablename__ = 'follows'
-    pass
+    shop_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    driver_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 
@@ -91,7 +104,28 @@ class Car(db.Model):
     """
     """
     __tablename__ = "cars"
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    license_number = db.Column(db.String(64), unique=True)
+    register_since = db.Column(db.DateTime, default=datetime.utcnow)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    brand_id = db.Column(db.Integer, db.ForeignKey('brands.id'))
+    data = db.relationship('CarData', backref='car', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Car, self).__init__(**kwargs)
+
+    def to_json(self):
+        json_user = {
+            'id': self.id,
+            'license_number': self.license_number,
+            'register_since': self.register_since,
+            'owner': self.owner,
+            'brand': self.brand
+        }
+        return json_user
+
+    def __repr__(self):
+        return '<Car %r>' % self.license_number
 
 
 
@@ -99,7 +133,19 @@ class CarData(db.Model):
     """
     """
     __tablename__ = 'car_data'
-    pass
+    id = db.Column(db.Integer, primary_key=True)
+    obd_rpm = db.Column(db.DECIMAL(8,2))
+    obd_vss = db.Column(db.DECIMAL(8,2))
+    obd_ect = db.Column(db.DECIMAL(8,2))
+    obd_maf = db.Column(db.DECIMAL(8,2))
+    obd_map = db.Column(db.DECIMAL(8,2))
+    obd_o1v = db.Column(db.DECIMAL(8,2))
+    env_temperature = db.Column(db.DECIMAL(8,2))
+    env_humidity = db.Column(db.DECIMAL(8,2))
+    env_pm25 = db.Column(db.DECIMAL(8,2))
+    video_path = db.Column(db.String(64))
+    timestamp = db.Column(db.DateTime())
+    car_id = db.Column(db.Integer, db.ForeignKey('cars.id'))
 
 
 
@@ -123,6 +169,7 @@ class User(UserMixin, db.Model):
     avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    cars = db.relationship('Car', backref='owner', lazy='dynamic')
     # TODO Add follow relationship
 
 
