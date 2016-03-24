@@ -160,17 +160,26 @@ class User(UserMixin, db.Model):
     # persional profile data
     name = db.Column(db.String(64))
     sex = db.Column(db.Boolean, default=True, index=True)
-    age = db.Column(db.Integer) # change with year, see by user only
+    age = db.Column(db.Integer) # change with year, seen by user only
     profession = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.TEXT())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-    # avatar_hash = db.Column(db.String(32))
+    avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     cars = db.relationship('Car', backref='owner', lazy='dynamic')
-    # TODO Add follow relationship
+    drivers = db.relationship('Follow',
+                                    ForeignKey=[Follow.shop_id],
+                                    backref=db.backref('shop', 'joined'),
+                                    lazy='dynamic',
+                                    cascade='all, delete-orphan')
+    shops = db.relationship('Follow',
+                                    ForeignKey=[Follow.driver_id],
+                                    backref=db.backref('driver', 'joined'),
+                                    lazy='dynamic',
+                                    cascade='all, delete-orphan')
 
 
     def __init__(self, **kw):
@@ -269,8 +278,29 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
+    # only role is shop has permission to follow
+    def follows(self, user):
+        if not self.is_following(user):
+            f = Follow(shop=self, driver=user)
+            db.session.add(f)
+
+    # only role is shop has permission to follow
+    def unfollow(self, user):
+        f = self.drivers.filter_by(driver_id=user.id).first()
+        if f:
+            db.session.delete(f)
+
+    # for shop
+    def is_following(self, user):
+        return self.drivers.filter_by(driver_id=user.id).first() is not None
+
+    # for driver(may never use)
+    def is_followed_by(self, user):
+        return self.shops.filter_by(shop_id=user.id).first() is not None
+
     def __repr__(self):
         return '<User %r>' % self.username
+
 
 
 class AnonymousUser(AnonymousUserMixin):
