@@ -157,7 +157,7 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
-    # persional profile data
+    # ===== persional profile data =====
     name = db.Column(db.String(64))
     sex = db.Column(db.Boolean, default=True, index=True)
     age = db.Column(db.Integer) # change with year, seen by user only
@@ -167,17 +167,21 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
+    # ===== 4S Shop need more field ======
+    # shop_name
+    # phone_number
+    # shop_confirmed
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     cars = db.relationship('Car', backref='owner', lazy='dynamic')
     drivers = db.relationship('Follow',
-                                    ForeignKey=[Follow.shop_id],
-                                    backref=db.backref('shop', 'joined'),
+                                    foreign_keys=[Follow.shop_id],
+                                    backref=db.backref('shop', lazy='joined'),
                                     lazy='dynamic',
                                     cascade='all, delete-orphan')
     shops = db.relationship('Follow',
-                                    ForeignKey=[Follow.driver_id],
-                                    backref=db.backref('driver', 'joined'),
+                                    foreign_keys=[Follow.driver_id],
+                                    backref=db.backref('driver', lazy='joined'),
                                     lazy='dynamic',
                                     cascade='all, delete-orphan')
 
@@ -254,6 +258,10 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
+    @property
+    def drivers_cars(self):
+        return Car.query.join(Follow, Follow.driver_id == Car.owner_id).filter_by(Follow.shop_id == self.id)
+
     def to_json(self):
         json_user = {
             'id': self.id,
@@ -273,6 +281,12 @@ class User(UserMixin, db.Model):
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
+
+    def is_shop(self):
+        pass
+
+    def is_driver(self):
+        pass
 
     def ping(self):
         self.last_seen = datetime.utcnow()
