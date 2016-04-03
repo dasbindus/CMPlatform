@@ -119,8 +119,8 @@ class Car(db.Model):
             'id': self.id,
             'license_number': self.license_number,
             'register_since': self.register_since,
-            'owner': self.owner,
-            'brand': self.brand
+            'owner': self.owner.name,
+            'brand': self.brand.name
         }
         return json_user
 

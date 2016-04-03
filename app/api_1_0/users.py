@@ -9,8 +9,9 @@ from flask import render_template, abort, session, redirect, url_for, \
 from . import api
 from .errors import forbidden, bad_request, unauthorized
 from .. import db
-from ..models import Permission, User, Role
+from ..models import Permission, User, Role, Post, Car
 from ..decorators import admin_required, permission_required
+from .errors import not_found
 import datetime
 # import json
 
@@ -38,8 +39,11 @@ def new_user():
 
 @api.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
-    user = User.query.get_or_404(id)
-    return jsonify(user.to_json())
+    user = User.query.get(id)
+    if user is not None:
+        return jsonify(user.to_json())
+    else:
+        return not_found('resources not found.')
 
 
 @api.route('/users/<int:id>', methods=['DELETE'])
@@ -52,45 +56,49 @@ def delete_user(id):
 def get_user_posts(id):
     # TODO Add relatoinship between User and Post
 
-    # user = User.query.get_or_404(id)
-    # page = request.args.get('page', 1, type=int)
-    # pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
-    #     page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
-    # posts = pagination.items
-    # prev = None
-    # next=None
-    # if pagination.has_prev:
-    #     prev = url_for('', page=page-1, _external=True)
-    # if pagination.has_next:
-    #     next = url_for('', page=page+1, _external=True)
-    # return jsonify({
-    #     'posts': [post.to_json() for post in posts],
-    #     'prev': prev,
-    #     'next': next,
-    #     'count': pagination.total,
-    #     'time': datetime.datetime.utcnow()
-    # })
-    pass
+    user = User.query.get(id)
+    if user is None:
+        return not_found('resources not found.')
+    page = request.args.get('page', 1, type=int)
+    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+    prev = None
+    next=None
+    if pagination.has_prev:
+        prev = url_for('', page=page-1, _external=True)
+    if pagination.has_next:
+        next = url_for('', page=page+1, _external=True)
+    return jsonify({
+        'posts': [post.to_json() for post in posts],
+        'prev': prev,
+        'next': next,
+        'count': pagination.total,
+        'time': datetime.datetime.utcnow()
+    })
+
 
 
 @api.route('/users/<int:id>/cars/', methods=['GET'])
 def get_user_cars(id):
-    # user = User.get_or_404(id)
-    # page = request.args.get('page', 1, type=int)
-    # pagination = user.cars.order_by(Car.timestamp.desc()).paginate(
-    #     page, per_page=current_app.config['CARS_PER_PAGE'], error_out=False)
-    # cars = pagination.items
-    # prev = None
-    # next = None
-    # if pagination.has_prev:
-    #     prev = url_for('', page=page-1, _external=True)
-    # if pagination.has_next:
-    #     next = url_for('', page=page+1, _external=True)
-    # return jsonify({
-    #     'cars': [car.to_json() for car in cars],
-    #     'prev': prev,
-    #     'next': next,
-    #     'count': pagination.total,
-    #     'time': datetime.datetime.utcnow()
-    # })
-    pass
+    user = User.query.get(id)
+    if user is None:
+        return not_found('resources not found.')
+    page = request.args.get('page', 1, type=int)
+    pagination = user.cars.order_by(Car.register_since.desc()).paginate(
+        page, per_page=current_app.config['CARS_PER_PAGE'], error_out=False)
+    cars = pagination.items
+    prev = None
+    next = None
+    if pagination.has_prev:
+        prev = url_for('', page=page-1, _external=True)
+    if pagination.has_next:
+        next = url_for('', page=page+1, _external=True)
+    return jsonify({
+        'cars': [car.to_json() for car in cars],
+        'prev': prev,
+        'next': next,
+        'count': pagination.total,
+        'time': datetime.datetime.utcnow()
+    })
+
