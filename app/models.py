@@ -318,12 +318,12 @@ class User(UserMixin, db.Model):
         return self.shops.filter_by(shop_id=user.id).first() is not None
 
     def generate_auth_token(self, expiration):
-        s = Serializer(current_app.config[SECRET_KEY], expires_in=expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer(current_app.config[SECRET_KEY])
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except:
