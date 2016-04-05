@@ -30,17 +30,18 @@ def get_all_users():
 
 
 @api.route('/users/', methods=['POST'])
-#@permission_required(Permission.ADMINISTER)
+@permission_required(Permission.ADMINISTER)
 def new_user():
     user = User.from_json(request.json)
     token = user.generate_confirmation_token()
-    #send_email(user.email, 'Confirm Your Account',
-    #               'auth/email/confirm', user=user, token=token)
+    send_email(user.email, 'Confirm Your Account',
+                   'auth/email/confirm', user=user, token=token)
     db.session.add(user)
     db.session.commit()
     return jsonify({
         'user': user.to_json(),
-        'Location': url_for('api.get_user', id=user.id, _external=True)
+        'location': url_for('api.get_user', id=user.id, _external=True),
+        'create_at': datetime.datetime.utcnow()
     }), 201
 
 
