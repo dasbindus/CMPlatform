@@ -10,6 +10,7 @@ from . import api
 from .errors import forbidden, bad_request, unauthorized
 from .. import db
 from ..models import Permission, User, Role, Post, Car
+from ..emails import send_email
 from ..decorators import admin_required, permission_required
 from .errors import not_found
 import datetime
@@ -29,12 +30,18 @@ def get_all_users():
 
 
 @api.route('/users/', methods=['POST'])
-# @permission_required(Permission.) # TODO Permission Design
+#@permission_required(Permission.ADMINISTER)
 def new_user():
     user = User.from_json(request.json)
+    token = user.generate_confirmation_token()
+    #send_email(user.email, 'Confirm Your Account',
+    #               'auth/email/confirm', user=user, token=token)
     db.session.add(user)
     db.session.commit()
-    return jsonify({user.to_json()}), 201
+    return jsonify({
+        'user': user.to_json(),
+        'Location': url_for('api.get_user', id=user.id, _external=True)
+    }), 201
 
 
 @api.route('/users/<int:id>', methods=['GET'])
@@ -47,15 +54,19 @@ def get_user(id):
 
 
 @api.route('/users/<int:id>', methods=['DELETE'])
-# @permission_required
+@permission_required(Permission.ADMINISTER)
 def delete_user(id):
-    pass
+    user = User.query.get(id)
+    if user is not None:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'delete successfully.'})
+    else:
+        return not_found('resources not found.')
 
 
 @api.route('/users/<int:id>/posts/', methods=['GET'])
 def get_user_posts(id):
-    # TODO Add relatoinship between User and Post
-
     user = User.query.get(id)
     if user is None:
         return not_found('resources not found.')

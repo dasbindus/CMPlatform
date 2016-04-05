@@ -10,9 +10,13 @@ __author__ = 'Jack Bai'
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+import bleach
+from flask import current_app, request, url_for
 from flask.ext.login import UserMixin, AnonymousUserMixin
+from app.exceptions import ValidationError
 from . import db, login_manager
+import re
+
 
 
 # TODO
@@ -270,6 +274,7 @@ class User(UserMixin, db.Model):
             'email': self.email,
             'sex': self.sex,
             'age': self.age,
+            'confirmation': self.confirmed,
             'member_since': self.member_since,
             'last_seen': self.last_seen
         }
@@ -311,6 +316,28 @@ class User(UserMixin, db.Model):
     # for driver(may never use)
     def is_followed_by(self, user):
         return self.shops.filter_by(shop_id=user.id).first() is not None
+
+    @staticmethod
+    def from_json(json_user):
+        email = json_user.get('email')
+        username = json_user.get('username')
+        password = json_user.get('password')
+        _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
+        if not email or not _RE_EMAIL.match(email):
+            raise ValidationError('email error.')
+        if not username:
+            raise ValidationError('username can not be empty.')
+        if not password:
+            raise ValidationError('password can not be empty.')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            raise ValidationError('Email already in use.')
+        user = User.query.filter_by(username=username).first()
+        if user:
+            raise ValidationError('Username already in use.')
+        return User(email=email, 
+                    username=username, 
+                    password=password)
 
     def __repr__(self):
         return '<User %r>' % self.username
