@@ -119,14 +119,27 @@ class Car(db.Model):
         super(Car, self).__init__(**kwargs)
 
     def to_json(self):
-        json_user = {
+        json_car = {
             'id': self.id,
             'license_number': self.license_number,
             'register_since': self.register_since,
             'owner': self.owner.name,
             'brand': self.brand.name
         }
-        return json_user
+        return json_car
+
+    @staticmethod
+    def from_json(json_car):
+        license_number = json_car.get('license_number')
+        brand_id = json_car.get('brand_id')
+        if not license_number:
+            raise ValidationError('license_number can not be empty.')
+        if not brand_id:
+            raise ValidationError('brand_id can not be empty.')
+        car = Car.query.filter_by(license_number=license_number).first()
+        if car:
+            raise ValidationError('license_number already in use.')
+        return Car(license_number=license_number, brand_id=brand_id)
 
     def __repr__(self):
         return '<Car %r>' % self.license_number

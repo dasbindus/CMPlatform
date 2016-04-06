@@ -3,7 +3,7 @@ from .. import db
 from . import api
 from ..models import User, Car, Permission
 from .errors import not_found, forbidden
-#from .decorators import permission_required
+from .decorators import permission_required
 import datetime
 
 
@@ -21,9 +21,17 @@ def get_all_cars():
 
 
 @api.route('/cars/', methods=['POST'])
-#@permission_required()
+@permission_required(Permission.ADMINISTER)
 def new_car():
-    pass
+    car = Car.from_json(request.json)
+    car.owner = g.current_user
+    db.session.add(car)
+    db.session.commit()
+    return jsonify({
+        'car': car.to_json(),
+        'location': url_for('api.get_car', id=car.id, _external=True),
+        'create_at': datetime.datetime.utcnow()
+    }), 201
 
 
 @api.route('/cars/<int:id>', methods=['GET'])
@@ -36,8 +44,15 @@ def get_car(id):
 
 
 @api.route('/cars/<int:id>', methods=['DELETE'])
+@permission_required(Permission.ADMINISTER)
 def delete_car(id):
-    pass
+    car = Car.query.get(id)
+    if car:
+        db.session.delete(car)
+        db.session.commit()
+        return jsonify({'message': 'delete car successfully.'})
+    else:
+        return not_found('recources not found')
 
 
 

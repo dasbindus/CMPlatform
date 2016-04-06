@@ -25,6 +25,7 @@ blinker==1.4
 colorama==0.3.6
 dominate==2.1.12
 html5lib==0.9999999
+httpie==0.9.3
 itsdangerous==0.24
 mysql-connector-python==1.0.12
 python-editor==0.3

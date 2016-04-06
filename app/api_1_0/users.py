@@ -11,7 +11,7 @@ from .errors import forbidden, bad_request, unauthorized
 from .. import db
 from ..models import Permission, User, Role, Post, Car
 from ..emails import send_email
-from ..decorators import admin_required, permission_required
+from .decorators import permission_required
 from .errors import not_found
 import datetime
 # import json
