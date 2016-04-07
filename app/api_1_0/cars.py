@@ -1,13 +1,14 @@
 from flask import jsonify, request, g, abort, url_for, current_app
 from .. import db
 from . import api
-from ..models import User, Car, Permission
+from ..models import User, Car, Permission, CarData
 from .errors import not_found, forbidden
 from .decorators import permission_required
 import datetime
 
 
 __author__ = 'Jack'
+
 
 
 @api.route('/cars/', methods=['GET'])
@@ -52,6 +53,54 @@ def delete_car(id):
         return jsonify({'message': 'delete car successfully.'})
     else:
         return not_found('recources not found')
+
+
+@api.route('/cars/<int:id>/data/', methods=['GET'])
+def get_car_data(id):
+    # data_all = CarData.query.filter_by(car_id=id).all()
+    page = request.args.get('page', 1, type=int)
+    car = Car.query.get_or_404(id)
+    pagination = car.data.order_by(CarData.timestamp.desc()).paginate(
+        page, per_page=current_app.config['DATA_PER_PAGE'], error_out=False)
+    data_all = pagination.items
+    prev = None
+    next = None
+    if pagination.has_prev:
+        prev = url_for('api.get_car_data', id=id, page=page-1, _external=True)
+    if pagination.has_next:
+        next = url_for('api.get_car_data', id=id, page=page+1, _external=True)
+    return jsonify({
+        'data': [data.to_json() for data in data_all],
+        'prev': prev,
+        'next': next,
+        'count': pagination.total,
+        'time': datetime.datetime.utcnow()
+    })
+
+
+@api.route('/cars/<int:id>/data/', methods=['POST'])
+@permission_required(Permission.ADMINISTER)
+def new_car_data(id):
+    pass
+
+
+@api.route('/cars/<int:id>/data/<int:datetime>', methods=['GET'])
+def get_car_data_date(id, datetime):
+    pass
+
+
+@api.route('/cars/<int:id>/data/<int:datetime>', methods=['DELETE'])
+def delete_car_data_date(id, datetime):
+    pass
+
+
+@api.route('/cars/<int:id>/data/query/', methods=['POST'])
+def query_car_data(id):
+    pass
+
+
+
+
 
 
 

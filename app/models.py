@@ -16,6 +16,13 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
 from . import db, login_manager
 import re
+import decimal
+
+
+def decimal2float(obj):
+    if isinstance(obj, decimal.Decimal):
+        return float(obj)
+    raise TypeError
 
 
 
@@ -164,6 +171,46 @@ class CarData(db.Model):
     timestamp = db.Column(db.DateTime())
     car_id = db.Column(db.Integer, db.ForeignKey('cars.id'))
 
+    def __init__(self, **kwargs):
+        super(CarData, self).__init__(**kwargs)
+
+    def to_json(self):
+        json_cardata = {
+            'id': self.id,
+            'obd_rpm': decimal2float(self.obd_rpm),
+            'obd_vss': decimal2float(self.obd_vss),
+            'obd_ect': decimal2float(self.obd_ect),
+            'obd_maf': decimal2float(self.obd_maf),
+            'obd_map': decimal2float(self.obd_map),
+            'obd_o1v': decimal2float(self.obd_o1v),
+            'env_temperature': decimal2float(self.env_temperature),
+            'env_humidity': decimal2float(self.env_humidity),
+            'env_pm25': decimal2float(self.env_pm25),
+            'video_path': self.video_path,
+            'timestamp': self.timestamp,
+            'car_id': self.car_id
+        }
+        return json_cardata
+
+    @staticmethod
+    def from_json(json_cardata):
+        obd_rpm = json_cardata.get('obd_rpm')
+        obd_vss = json_cardata.get('obd_vss')
+        obd_ect = json_cardata.get('obd_ect')
+        obd_maf = json_cardata.get('obd_maf')
+        obd_map = json_cardata.get('obd_map')
+        obd_o1v = json_cardata.get('obd_o1v')
+        env_temperature = json_cardata.get('env_temperature')
+        env_humidity = json_cardata.get('env_humidity')
+        env_pm25 = json_cardata.get('env_pm25')
+        video_path = json_cardata.get('video_path')
+        timestamp = json_cardata.get('timestamp')
+        car_id = json_cardata.get('car_id')
+        return CarData(obd_rpm=obd_rpm, obd_vss=obd_vss,\
+            obd_ect=obd_ect, obd_maf=obd_maf, obd_map=obd_map, \
+            obd_o1v=obd_o1v, env_temperature=env_temperature,\
+            env_humidity=env_humidity, env_pm25=env_pm25,\
+            video_path=video_path, timestamp=timestamp, car_id=car_id)
 
 
 class User(UserMixin, db.Model):
