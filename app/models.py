@@ -22,6 +22,8 @@ import decimal
 def decimal2float(obj):
     if isinstance(obj, decimal.Decimal):
         return float(obj)
+    elif obj is None:
+        return None
     raise TypeError
 
 
@@ -205,12 +207,11 @@ class CarData(db.Model):
         env_pm25 = json_cardata.get('env_pm25')
         video_path = json_cardata.get('video_path')
         timestamp = json_cardata.get('timestamp')
-        car_id = json_cardata.get('car_id')
         return CarData(obd_rpm=obd_rpm, obd_vss=obd_vss,\
             obd_ect=obd_ect, obd_maf=obd_maf, obd_map=obd_map, \
             obd_o1v=obd_o1v, env_temperature=env_temperature,\
             env_humidity=env_humidity, env_pm25=env_pm25,\
-            video_path=video_path, timestamp=timestamp, car_id=car_id)
+            video_path=video_path, timestamp=timestamp)
 
 
 class User(UserMixin, db.Model):

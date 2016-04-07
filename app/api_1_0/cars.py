@@ -91,7 +91,16 @@ def get_car_data(id):
 @api.route('/cars/<int:id>/data/', methods=['POST'])
 @permission_required(Permission.ADMINISTER)
 def new_car_data(id):
-    pass
+    data = CarData.from_json(request.json)
+    data.car_id = id
+    db.session.add(data)
+    db.session.commit()
+    return jsonify({
+        'data': data.to_json(),
+        'create_at': datetime.datetime.utcnow()
+    }), 201,\
+    {'Location': url_for('api.get_data', id=data.id, _external=True)}
+    
 
 
 @api.route('/cars/<int:id>/data/<int:datetime>', methods=['GET'])
