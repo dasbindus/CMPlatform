@@ -21,10 +21,21 @@ import datetime
 
 @api.route('/users/', methods=['GET'])
 def get_all_users():
-    users = User.query.all()
+    page = request.args.get('page', 1, type=int)
+    pagination = User.query.paginate(
+        page, per_page=current_app.config['USERS_PER_PAGE'], error_out=False)
+    users = pagination.items
+    prev = None
+    next = None
+    if pagination.has_prev:
+        prev = url_for('api.get_all_users', page=page-1, _external=True)
+    if pagination.has_next:
+        next = url_for('api.get_all_users', page=page+1, _external=True)
     return jsonify({
         'user': [user.to_json() for user in users],
-        'count': len(users),
+        'prev': prev,
+        'next': next,
+        'count': pagination.total,
         'time': datetime.datetime.utcnow() 
     })
 
@@ -77,9 +88,9 @@ def get_user_posts(id):
     prev = None
     next=None
     if pagination.has_prev:
-        prev = url_for('', page=page-1, _external=True)
+        prev = url_for('api.get_user_posts', id=id, page=page-1, _external=True)
     if pagination.has_next:
-        next = url_for('', page=page+1, _external=True)
+        next = url_for('api.get_user_posts', id=id, page=page+1, _external=True)
     return jsonify({
         'posts': [post.to_json() for post in posts],
         'prev': prev,
@@ -102,9 +113,9 @@ def get_user_cars(id):
     prev = None
     next = None
     if pagination.has_prev:
-        prev = url_for('', page=page-1, _external=True)
+        prev = url_for('api.get_user_cars', id=id, page=page-1, _external=True)
     if pagination.has_next:
-        next = url_for('', page=page+1, _external=True)
+        next = url_for('api.get_user_cars', id=id, page=page+1, _external=True)
     return jsonify({
         'cars': [car.to_json() for car in cars],
         'prev': prev,

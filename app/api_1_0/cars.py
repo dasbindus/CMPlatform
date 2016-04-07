@@ -13,10 +13,21 @@ __author__ = 'Jack'
 
 @api.route('/cars/', methods=['GET'])
 def get_all_cars():
-    cars = Car.query.all()
+    page = request.args.get('page', 1, type=int)
+    pagination = Car.query.paginate(
+        page, per_page=current_app.config['CARS_PER_PAGE'], error_out=False)
+    cars = pagination.items
+    prev = None
+    next = None
+    if pagination.has_prev:
+        prev = url_for('api.get_all_cars', page=page-1, _external=True)
+    if pagination.has_next:
+        next = url_for('api.get_all_cars', page=page+1, _external=True)
     return jsonify({
         'cars': [car.to_json() for car in cars],
-        'count': len(cars),
+        'prev': prev,
+        'next': next,
+        'count': pagination.total,
         'time': datetime.datetime.utcnow()
     })
 
@@ -57,7 +68,6 @@ def delete_car(id):
 
 @api.route('/cars/<int:id>/data/', methods=['GET'])
 def get_car_data(id):
-    # data_all = CarData.query.filter_by(car_id=id).all()
     page = request.args.get('page', 1, type=int)
     car = Car.query.get_or_404(id)
     pagination = car.data.order_by(CarData.timestamp.desc()).paginate(
