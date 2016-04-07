@@ -40,9 +40,8 @@ def new_user():
     db.session.commit()
     return jsonify({
         'user': user.to_json(),
-        'location': url_for('api.get_user', id=user.id, _external=True),
         'create_at': datetime.datetime.utcnow()
-    }), 201
+    }), 201, {'Location': url_for('api.get_user', id=user.id, _external=True)}
 
 
 @api.route('/users/<int:id>', methods=['GET'])

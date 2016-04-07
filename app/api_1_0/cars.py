@@ -29,9 +29,8 @@ def new_car():
     db.session.commit()
     return jsonify({
         'car': car.to_json(),
-        'location': url_for('api.get_car', id=car.id, _external=True),
         'create_at': datetime.datetime.utcnow()
-    }), 201
+    }), 201, {'Location': url_for('api.get_car', id=car.id, _external=True)}
 
 
 @api.route('/cars/<int:id>', methods=['GET'])
