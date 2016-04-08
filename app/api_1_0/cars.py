@@ -113,10 +113,14 @@ def delete_car_data_date(id, datetime):
     pass
 
 
+QUERY_TYPE = {'': 1, '': 2, '': 3}
+
+
 @api.route('/cars/<int:id>/data/query/', methods=['POST'])
 def query_car_data(id):
+    # json_request = request.json
+    # query_type_id = json_request.get('')
     pass
-
 
 
 
