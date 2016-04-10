@@ -2,9 +2,11 @@ from flask import jsonify, request, g, abort, url_for, current_app
 from .. import db
 from . import api
 from ..models import User, Car, Permission, CarData
-from .errors import not_found, forbidden
+from .errors import not_found, forbidden, bad_request
 from .decorators import permission_required
 import datetime
+import json
+import decimal
 
 
 __author__ = 'Jack'
@@ -113,14 +115,108 @@ def delete_car_data_date(id, datetime):
     pass
 
 
-QUERY_TYPE = {'': 1, '': 2, '': 3}
+QUERY_TYPE = {'OBD': 1, 'ENV': 2, 'LOCATION': 3, 'VIDEO': 4, 'ALL': 5}
+OBD_DATA = ['obd_rpm', 'obd_vss', 'obd_ect', 'obd_maf', 'obd_map', 'obd_o1v']
+ENV_DATA = ['env_temperature', 'env_humidity', 'env_pm25']
+
+def decimal2float(obj):
+    if isinstance(obj, decimal.Decimal):
+        return float(obj)
+    elif obj is None:
+        return None
+    raise TypeError
 
 
 @api.route('/cars/<int:id>/data/query/', methods=['POST'])
 def query_car_data(id):
-    # json_request = request.json
-    # query_type_id = json_request.get('')
-    pass
+    car = Car.query.get_or_404(id)
+    json_request = request.json
+    query_id = json_request.get('query_id')
+    query_at = json_request.get('query_at')
+    query_paras = json_request.get('query_paras')
+    if query_id is None:
+        return bad_request('Bad query request.')
+    nowtime = datetime.datetime.utcnow()
+    # TODO 0 <= (nowtime - query_at) <= 1 hour
+    if query_paras is None:
+        return bad_request('No query parameters.')
+    query_type_id = query_paras.get('query_type_id')
+    range_start = query_paras.get('range_start')
+    range_end = query_paras.get('range_end')
+    data_per_page = query_paras.get('data_per_page')
+    if data_per_page is None:
+        data_per_page = 100
+    # Check if query_paras meet the requirements
+    para_list = [query_type_id, range_start, range_end, data_per_page]
+    for para in para_list:
+        if para:
+            continue
+        else:
+            return bad_request('Parameters is illegal.')
+    page = request.args.get('page', 1, type=int)
+    # the order of query parameters CAN'T change.
+    if query_type_id == QUERY_TYPE['OBD']:
+        pagination = CarData.query.with_entities(CarData.obd_rpm, CarData.obd_vss,
+            CarData.obd_ect, CarData.obd_maf, CarData.obd_map, CarData.obd_o1v).filter(
+            CarData.timestamp.between(range_start, range_end)).paginate(
+            page, per_page=data_per_page, error_out=False)
+        datas = pagination.items
+        prev = None
+        next = None
+        if pagination.has_prev:
+            prev = url_for('api.query_car_data', id=id, page=page-1, _external=True)
+        if pagination.has_next:
+            next = url_for('api.query_car_data', id=id, page=page+1, _external=True)
+        return jsonify({
+            'response_id': query_id,
+            'data': json.dumps([dict(zip(data.keys(), [decimal2float(value) for value in data])) for data in datas]),
+            'count': pagination.total,
+            'prev': prev,
+            'next': next,
+            'response_time': datetime.datetime.utcnow()
+        }), 201
+    if query_type_id == QUERY_TYPE['ENV']:
+        pagination = CarData.query.with_entities(CarData.env_temperature,
+            CarData.env_humidity, CarData.env_pm25).filter(
+            CarData.timestamp.between(range_start, range_end)).paginate(
+            page, per_page=data_per_page, error_out=False)
+        datas = pagination.items
+        prev = None
+        next = None
+        if pagination.has_prev:
+            prev = url_for('api.query_car_data', id=id, page=page-1, _external=True)
+        if pagination.has_next:
+            next = url_for('api.query_car_data', id=id, page=page+1, _external=True)
+        return jsonify({
+            'response_id': query_id,
+            'data': json.dumps([dict(zip(data.keys(), [decimal2float(value) for value in data])) for data in datas]),
+            'count': pagination.total,
+            'prev': prev,
+            'next': next,
+            'response_time': datetime.datetime.utcnow()
+        }), 201
+    if query_type_id == QUERY_TYPE['VIDEO']:
+        pagination = CarData.query.with_entities(
+            CarData.video_path).filter(
+            CarData.timestamp.between(range_start, range_end)).paginate(
+            page, per_page=data_per_page, error_out=False)
+        datas = pagination.items
+        prev = None
+        next = None
+        if pagination.has_prev:
+            prev = url_for('api.query_car_data', id=id, page=page-1, _external=True)
+        if pagination.has_next:
+            next = url_for('api.query_car_data', id=id, page=page+1, _external=True)
+        return jsonify({
+            'response_id': query_id,
+            'data': json.dumps([dict(zip(data.keys(), [decimal2float(value) for value in data])) for data in datas]),
+            'count': pagination.total,
+            'prev': prev,
+            'next': next,
+            'response_time': datetime.datetime.utcnow()
+        }), 201
+    return bad_request('Unknown query type.')
+
 
 
 
