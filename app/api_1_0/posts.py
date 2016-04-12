@@ -1,9 +1,9 @@
 from flask import jsonify, request, g, abort, url_for, current_app
 from .. import db
-from ..models import Post, Permission
+from ..models import Post, Permission, Comment
 from . import api
 from .decorators import permission_required
-from .errors import forbidden
+from .errors import forbidden, not_found
 import datetime
 
 
@@ -51,7 +51,7 @@ def new_post():
 
 @api.route('/posts/<int:id>', methods=['PUT'])
 @permission_required(Permission.ADMINISTER)
-def edit_post(id):
+def update_post(id):
     post = Post.query.get_or_404(id)
     if g.current_user != post.author and \
             not g.current_user.can(Permission.ADMINISTER):
@@ -60,4 +60,14 @@ def edit_post(id):
     db.session.add(post)
     return jsonify(post.to_json())
 
+
+@api.route('/posts/<int:id>', methods=['DELETE'])
+def delete_post(id):
+    post = Post.query.get_or_404(id)
+    if post:
+        db.session.delete(post)
+        db.session.commit()
+        return jsonify({'message': 'delete post successfully.'})
+    else:
+        return not_found('recources not found')
 

@@ -447,9 +447,9 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     type_id = db.Column(db.Integer, db.ForeignKey('post_type.id'))
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    comments = db.relationship('Comment', backref='post', lazy='dynamic', \
+        cascade="all, delete-orphan")
     # TODO add relationship
-    # comments=2abcfimos
 
     def __init__(self, **kwargs):
         super(Post, self).__init__(**kwargs)

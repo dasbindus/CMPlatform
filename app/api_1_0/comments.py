@@ -3,6 +3,7 @@ from .. import db
 from ..models import Post, Permission, Comment
 from . import api
 from .decorators import permission_required
+from .errors import forbidden, not_found
 import datetime
 
 
@@ -75,4 +76,13 @@ def new_post_comment(id):
                              _external=True)}
 
 
+@api.route('/comments/<int:id>', methods=['DELETE'])
+def delete_comment(id):
+    comment = Comment.query.get_or_404(id)
+    if comment:
+        db.session.delete(comment)
+        db.session.commit()
+        return jsonify({'message': 'delete comment successfully.'})
+    else:
+        return not_found('recources not found')
 
