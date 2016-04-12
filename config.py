@@ -21,9 +21,9 @@ class Config:
     MAIL_SENDER = os.environ.get('MAIL_USERNAME')
     MY_ADMIN = os.environ.get('MY_ADMIN')
 
-    POSTS_PER_PAGE = 20
+    POSTS_PER_PAGE = 2
     FOLLOWERS_PER_PAGE = 50
-    COMMENTS_PER_PAGE = 15
+    COMMENTS_PER_PAGE = 3
     USERS_PER_PAGE = 5
     CARS_PER_PAGE = 5
     DATA_PER_PAGE = 5
