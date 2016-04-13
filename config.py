@@ -13,6 +13,8 @@ class Config:
     SECRET_KEY = 'CaNYoUSeEMeNoW'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
+    VERSION = 'v1.0.0'
+
     MAIL_SERVER = 'smtp.163.com'
     MAIL_PORT = 25
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
